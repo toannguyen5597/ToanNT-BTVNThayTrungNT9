@@ -1,22 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+<!--    <meta charset="UTF-8">-->
+    <title>index</title>
 </head>
 <body>
-    
-    <!--/*@thymesVar id="user" type=""*/-->
-    <form th:action="@{/login}" th:object="${user}" method="post">
-        <p>
-            Username:
-            <input type="text">
-        </p>
-        <p>
-            Password:
-            <input type="password">
-        </p>
-        <input type="submit" value="Login">
+    <form method="post" name="Login" th:action="@{/direct}">
+        Username: <input type="text" name="username">
+        PassWord: <input type="password" name="password">
+        <input type="submit" name="login" value="Login">
     </form>
 </body>
 </html>

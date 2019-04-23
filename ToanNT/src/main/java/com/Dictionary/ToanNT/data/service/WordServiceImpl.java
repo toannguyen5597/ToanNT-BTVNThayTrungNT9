@@ -1,5 +1,6 @@
 package com.Dictionary.ToanNT.data.service;
 
+import com.Dictionary.ToanNT.data.model.User;
 import com.Dictionary.ToanNT.data.model.Word;
 import com.Dictionary.ToanNT.data.repository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,15 @@ public class WordServiceImpl implements WordService{
         return true;
     }
 
+    public User login(String username, String password){
+        try {
+            return wordRepository.login(username, password);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 //    public boolean login(String user, String pass){
 //        try {
 //            if("admin".equals(user) && "admin".equals(pass)) return true;
@@ -32,9 +42,9 @@ public class WordServiceImpl implements WordService{
 //        return false;
 //    }
 
-    public boolean deleteWord(Word word){
+    public boolean deleteWord(Integer id){
         try {
-            wordRepository.delete(word);
+            wordRepository.deleteById(id);
         }catch (Exception e){
             e.printStackTrace();
         }

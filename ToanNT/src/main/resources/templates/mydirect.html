@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form method="get" action="GET" >
+        <input type="text" list="languages" id="keyid">
+        <datalist id="languages" style="max-height: 200px;">
+            <th:block th:each="word : ${vm.getListWordDetail()}">
+                <option th:value="${word.getKey()}">
+            </th:block>
+        </datalist>
+        Từ khóa: <input type="text" name="txtKey" value="">
+        <p id="info1">Nơi hiện thị thông tin</p>
+        Nghĩa: <input type="text" name="txtMean">
+    </form>
+
+</body>
+</html>

@@ -1,34 +1,34 @@
 package com.Dictionary.ToanNT.controller;
 
+import com.Dictionary.ToanNT.data.model.User;
 import com.Dictionary.ToanNT.data.model.Word;
 import com.Dictionary.ToanNT.data.service.WordService;
 import com.Dictionary.ToanNT.data.service.WordServiceImpl;
+import com.Dictionary.ToanNT.viewmodel.ListDetail;
+import com.Dictionary.ToanNT.viewmodel.UserDetail;
+import com.Dictionary.ToanNT.viewmodel.WordDetail;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@Controller("/")
 public class controller {
     @Autowired
     WordServiceImpl wordService;
 
     List<Word> list;
 
-//    @RequestMapping(value = {"/", "/index"})
-//    public String homePage(Model model){
-//        User user= new User();
-//        model.addAttribute("user", user);
-//        return "redirect:login";
-//    }
-
-    @GetMapping("/getall")
-    public void getAll(){
-        list = wordService.getAll();
-        list.forEach(System.out::println);
+    //@GetMapping("/getall")
+    public List<Word> getAll(){
+        return wordService.getAll();
+        //list.forEach(System.out::println);
     }
 
     @GetMapping("/import/{path}")
@@ -72,7 +72,7 @@ public class controller {
         }
     }
 
-    @GetMapping("/search/{key}")
+    @GetMapping("/di{key}")
     public void getWordByKey(@PathVariable("key")String key){
         try {
             if(wordService.getWordByKey(list,key) != null){
@@ -84,22 +84,46 @@ public class controller {
         }
     }
 
-    @PostMapping("/delete")
-    public boolean deleteWord(@RequestBody Word word){
-        System.out.println(word);
+    @PostMapping(value = "/direc")
+    public String deleteWord(Model model, @RequestParam("id") Integer id){
         try {
-            wordService.deleteWord(word);
-            return true;
+            wordService.deleteWord(id);
+            ListDetail vm = listDetail();
+            model.addAttribute("vm", vm);
+            return "mydirect";
         }catch (Exception e){
             e.printStackTrace();
-            return false;
+            return "mydirect";
         }
     }
 
+    @GetMapping("/")
+    public String getIndex(){
+        return "login";
+    }
 
-//    @PostMapping("/login")
-//    public String login(){
-//        System.out.println("ok");
-//        return "";
-//    }
+    public ListDetail listDetail(){
+        ModelMapper modelMapper = new ModelMapper();
+        ListDetail vm = new ListDetail();
+        ArrayList<WordDetail> wordDetails = new ArrayList<>();
+        List<Word> word = getAll();
+        for(Word word1 : word) {
+            WordDetail wordDetail = new WordDetail();
+            wordDetail = modelMapper.map(word1, WordDetail.class);
+            wordDetails.add(wordDetail);
+        }
+        vm.setListWordDetail(wordDetails);
+        return vm;
+    }
+
+    @RequestMapping(value = "/direct", method = RequestMethod.POST)
+        public String login(Model model, @RequestParam("username") String username, @RequestParam("password") String password){
+        User user = wordService.login(username, password);
+        if(user != null){
+            ListDetail vm = listDetail();
+            model.addAttribute("vm", vm);
+            return "mydirect";
+        }
+        return "login";
+    }
 }

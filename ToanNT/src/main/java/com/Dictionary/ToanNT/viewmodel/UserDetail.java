@@ -1,21 +1,19 @@
-package com.Dictionary.ToanNT.data.model;
+package com.Dictionary.ToanNT.viewmodel;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 
-@Entity(name = "tbl_user")
-public class User {
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
+public class UserDetail {
     private int id;
-
-    @Column(name = "username")
     private String username;
-
-    @Column(name = "password")
     private String password;
 
-    public User() {
+    public UserDetail(int id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    public UserDetail() {
     }
 
     public int getId() {
